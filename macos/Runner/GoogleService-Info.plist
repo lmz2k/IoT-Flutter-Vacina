@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>390803522274-g5ujhva2m7muqko06jsaph7ikihlnea2.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.390803522274-g5ujhva2m7muqko06jsaph7ikihlnea2</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>390803522274-40mcbns82390b1l5mc97m0c9a5iotmpe.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCslKZtg3o6HGzwV19HDjzO_oewaNVKZ7c</string>
+	<key>GCM_SENDER_ID</key>
+	<string>390803522274</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.vacIot</string>
+	<key>PROJECT_ID</key>
+	<string>esp32-firebase-temp-31c09</string>
+	<key>STORAGE_BUCKET</key>
+	<string>esp32-firebase-temp-31c09.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:390803522274:ios:f1a7c06d59ca2510c694bb</string>
+	<key>DATABASE_URL</key>
+	<string>https://esp32-firebase-temp-31c09-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

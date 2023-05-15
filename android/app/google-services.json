@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "390803522274",
+    "firebase_url": "https://esp32-firebase-temp-31c09-default-rtdb.firebaseio.com",
+    "project_id": "esp32-firebase-temp-31c09",
+    "storage_bucket": "esp32-firebase-temp-31c09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390803522274:android:bc724a2511b7164ec694bb",
+        "android_client_info": {
+          "package_name": "com.example.vac_iot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390803522274-tibjeijjp7eh0ous5iba9l4vkdik83rn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAye7B312AwhksqSJ80irUAZI1Lrc1CY0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390803522274-tibjeijjp7eh0ous5iba9l4vkdik83rn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "390803522274-07mva4h0j4laoebkrkou5gj0n0q0r7jm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.temperatureDashboard"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:390803522274:android:0f0c7b189bac7550c694bb",
+        "android_client_info": {
+          "package_name": "com.ifpb.fapesqMonitorFrontend.fapesq_monitor_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "390803522274-tibjeijjp7eh0ous5iba9l4vkdik83rn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAye7B312AwhksqSJ80irUAZI1Lrc1CY0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "390803522274-tibjeijjp7eh0ous5iba9l4vkdik83rn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "390803522274-07mva4h0j4laoebkrkou5gj0n0q0r7jm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.temperatureDashboard"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
