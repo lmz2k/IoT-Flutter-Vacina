@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -29,8 +28,6 @@ class ChartPage extends StatelessWidget {
       dataList.add(TemperatureData(time, temperature, doc.data()['timestamp']));
     });
 
-    print(dataList.length);
-
     List<TemperatureData> sortedList = dataList.toList()..sort((a, b) => a.timestamp.compareTo(b.timestamp));
     Map<String, List<int>> groupedData = {};
 
@@ -45,8 +42,6 @@ class ChartPage extends StatelessWidget {
       }
     }
 
-    print(sortedList.length);
-
     final List<TemperatureData> averagedData = groupedData.entries.map((entry) {
       final time = entry.key;
       final temperatures = entry.value;
@@ -54,8 +49,6 @@ class ChartPage extends StatelessWidget {
 
       return TemperatureData(time, averageTemperature.toInt(), 0);
     }).toList();
-
-    print(averagedData.length);
 
     return averagedData;
   }
@@ -82,8 +75,8 @@ class ChartPage extends StatelessWidget {
           }
           return Column(
             children: [
-              Container(
-                height: 48, // Defina uma altura para o Container
+              SizedBox(
+                height: 48,
                 child: Center(
                   child: Text(
                       formattedDate

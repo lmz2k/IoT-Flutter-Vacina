@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:async';
 
+import 'package:intl/intl.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
 
@@ -18,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   StreamSubscription<DatabaseEvent>? subscription;
   dynamic selectedContainer;
   String temperature = "?";
+  String lastTime = "";
 
   @override
   void initState() {
@@ -49,8 +52,10 @@ class _HomePageState extends State<HomePage> {
     starCountRef = FirebaseDatabase.instance.ref(selectedContainer);
     subscription = starCountRef.onValue.listen((DatabaseEvent event) {
       final dynamic data = event.snapshot.value;
+      String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(data['timestamp'])  * 1000).toLocal());
       setState(() {
         temperature = data['temperature'];
+        lastTime = date;
       });
     });
   }
@@ -72,7 +77,7 @@ class _HomePageState extends State<HomePage> {
               child: Card(
                 color: Colors.transparent,
                 elevation: 0,
-                margin: EdgeInsets.all(0),
+                margin: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                   side: BorderSide(width: 1, color: Colors.grey[300]!),
@@ -90,11 +95,21 @@ class _HomePageState extends State<HomePage> {
                             : "$temperature°",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: temperature == "?"
-                              ? 24
-                              : 32, // definir um tamanho de fonte menor quando temperature == "?"
+                          fontSize: temperature == "?" ? 24 : 32,
+                          fontFamily: "Roboto",
                         ),
                       ),
+                      const SizedBox(height: 16),
+                      if (temperature != "?")
+                        Text(
+                          "Medido em: $lastTime",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontFamily: "Roboto",
+                          ),
+                        ),
+                      const SizedBox(height: 16),
                       if (temperature != "?")
                         ElevatedButton(
                           onPressed: () {
@@ -104,12 +119,10 @@ class _HomePageState extends State<HomePage> {
                               arguments: selectedContainer,
                             );
                           },
-                          child: Text("Ver detalhes"),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.grey[200],
-                            onPrimary: Colors.black,
                             elevation: 0,
                           ),
+                          child: const Text("Ver detalhes"),
                         ),
                     ],
                   ),
@@ -172,11 +185,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
