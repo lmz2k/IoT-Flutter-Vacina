@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     starCountRef = FirebaseDatabase.instance.ref(selectedContainer);
     subscription = starCountRef.onValue.listen((DatabaseEvent event) {
       final dynamic data = event.snapshot.value;
-      String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.fromMillisecondsSinceEpoch(int.parse(data['timestamp'])  * 1000).toLocal());
+      String date = DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(int.parse(data['timestamp'])  * 1000).toLocal());
       setState(() {
         temperature = data['temperature'];
         lastTime = date;
