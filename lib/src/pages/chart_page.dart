@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../components/drop_down.dart';
+
 class TemperatureData {
   final String time;
   final double temperature;
@@ -18,8 +20,9 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
-
   Future<List<TemperatureData>>? data;
+  List<String> dates = [];
+  String? selectedDate;
   String? high;
   String? low;
 
@@ -28,9 +31,9 @@ class _ChartPageState extends State<ChartPage> {
       throw Exception('A lista está vazia.');
     }
 
-    return list
-        .map((data) => data.temperature)
-        .reduce((currentMax, temperature) => temperature > currentMax ? temperature : currentMax);
+    return list.map((data) => data.temperature).reduce(
+        (currentMax, temperature) =>
+            temperature > currentMax ? temperature : currentMax);
   }
 
   double getMinTemperature(List<TemperatureData> list) {
@@ -38,43 +41,64 @@ class _ChartPageState extends State<ChartPage> {
       throw Exception('A lista está vazia.');
     }
 
-    return list
-        .map((data) => data.temperature)
-        .reduce((currentMin, temperature) => temperature < currentMin ? temperature : currentMin);
+    return list.map((data) => data.temperature).reduce(
+        (currentMin, temperature) =>
+            temperature < currentMin ? temperature : currentMin);
   }
 
-  Future<List<TemperatureData>> getData(String document) async {
-    DateTime today = DateTime.now();
-    String formattedDate =
-        "${today.day.toString()}/${today.month.toString()}/${today.year.toString()}";
-    List<TemperatureData> dataList = [];
-
+  Future <String> getDates(String document) async {
     final snapshot = await FirebaseFirestore.instance
         .collection(document)
-        // .where('date', isEqualTo: formattedDate)
         .get();
 
+    List<String> tempDates = [];
+
     snapshot.docs.forEach((doc) {
-      print(doc.data());
-      print(int.parse(doc.data()['timestamp']));
-
-      String timestampString = doc.data()['timestamp'];
-      DateTime timestamp =
-          DateTime.fromMillisecondsSinceEpoch(int.parse(timestampString) * 1000)
-              .toLocal();
-
-      String time =
-          "${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}";
-
-      double temperature = double.parse(doc.data()['temperature']);
-
-      dataList.add(TemperatureData(
-          time, temperature, int.parse(doc.data()['timestamp'])));
+      if (!tempDates.contains(doc.data()['date'])) {
+        tempDates.add(doc.data()['date']);
+      }
     });
 
     setState(() {
-        high = getMaxTemperature(dataList).toString();
-        low = getMinTemperature(dataList).toString();
+      dates = tempDates;
+    });
+
+    return tempDates[0];
+  }
+
+  Future<List<TemperatureData>> getData(String document, String? date) async {
+    List<TemperatureData> dataList = [];
+
+    date ??= await getDates(document);
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection(document)
+        .where('date', isEqualTo: date)
+        .get();
+
+    print(snapshot.docs.length);
+
+    snapshot.docs.forEach((doc) {
+      if(doc.data()['date'] == date) {
+        String timestampString = doc.data()['timestamp'];
+        DateTime timestamp =
+        DateTime.fromMillisecondsSinceEpoch(int.parse(timestampString) * 1000)
+            .toLocal();
+
+        String time =
+            "${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}";
+
+        double temperature = double.parse(doc.data()['temperature']);
+
+        dataList.add(TemperatureData(
+            time, temperature, int.parse(doc.data()['timestamp'])));
+      }
+    });
+
+    setState(() {
+      high = getMaxTemperature(dataList).toString();
+      low = getMinTemperature(dataList).toString();
+      selectedDate = date;
     });
 
     List<TemperatureData> sortedList = dataList.toList()
@@ -110,21 +134,17 @@ class _ChartPageState extends State<ChartPage> {
     final selectedContainer =
         ModalRoute.of(context)!.settings.arguments as String;
 
-    DateTime today = DateTime.now();
-    String formattedDate =
-        "${today.day.toString().padLeft(2, '0')}/${today.month.toString().padLeft(2, '0')}/${today.year}";
-
-    if(data == null){
+    if (data == null) {
       setState(() {
-        data = getData(selectedContainer);
+        data = getData(selectedContainer, null);
       });
-
     }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            data = getData(selectedContainer);
+            data = getData(selectedContainer, selectedDate);
           });
         },
         child: const Icon(Icons.refresh),
@@ -142,11 +162,24 @@ class _ChartPageState extends State<ChartPage> {
           }
           return Column(
             children: [
+
+                  DropdownList(items: dates, callback: (String? selected){
+                    if(selected != null){
+                      setState(() {
+                        data = getData(selectedContainer, selected);
+                      });
+                    }
+                  }),
+
               SizedBox(
                 height: 48,
-                child: Center(
-                  child: Text("Medias por minuto: ${formattedDate}"),
-                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Os valores mostrados estão em média por minuto da data: $selectedDate",
+                    textAlign: TextAlign.center,
+                  ),
+                )
               ),
               Expanded(
                 child: SfCartesianChart(

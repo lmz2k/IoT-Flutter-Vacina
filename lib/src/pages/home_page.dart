@@ -52,7 +52,10 @@ class _HomePageState extends State<HomePage> {
     starCountRef = FirebaseDatabase.instance.ref(selectedContainer);
     subscription = starCountRef.onValue.listen((DatabaseEvent event) {
       final dynamic data = event.snapshot.value;
-      String date = DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.fromMillisecondsSinceEpoch(int.parse(data['timestamp'])  * 1000).toLocal());
+      String date = DateFormat('dd/MM/yyyy HH:mm:ss').format(
+          DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(data['timestamp']) * 1000)
+              .toLocal());
       setState(() {
         temperature = data['temperature'];
         lastTime = date;
@@ -73,14 +76,14 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(bottom: 20),
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.3,
-              width: MediaQuery.of(context).size.width * 0.8,
+              width: MediaQuery.of(context).size.width * 1,
               child: Card(
                 color: Colors.transparent,
                 elevation: 0,
                 margin: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(width: 1, color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(0),
+                  side: BorderSide(width: 1, color: Colors.grey[800]!),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 14),
@@ -95,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                             : "$temperature°",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: temperature == "?" ? 24 : 32,
+                          fontSize: temperature == "?" ? 24 : 50,
                           fontFamily: "Roboto",
                         ),
                       ),
@@ -130,55 +133,75 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
+          const Text(
+            'Containers:',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 20),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: ListView.builder(
+                itemExtent: 90,
                 itemCount: containers.length,
                 physics: const BouncingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   dynamic containerId = containers[index];
-                  return Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          "Container ID: $containerId",
-                          style: TextStyle(
-                            fontFamily: "Roboto",
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: containerId == selectedContainer
-                                ? Colors.green
-                                : Colors.black,
+                  return SizedBox(
+                    height: 200,
+                    child: ListView(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 1, horizontal: 16),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.timeline_outlined,
+                              color: Colors.grey,
+                            ),
+                            title: Text(
+                              "$containerId",
+                              style: TextStyle(
+                                fontFamily: "Roboto",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: containerId == selectedContainer
+                                    ? Colors.green
+                                    : Colors.black,
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                color: containerId == selectedContainer
+                                    ? Colors.green
+                                    : Colors.black,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                selectedContainer = containerId;
+                                listen();
+                              });
+                            },
+                            tileColor: Colors.white,
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Colors.grey[400],
+                              size: 20,
+                            ),
+                            visualDensity: VisualDensity.compact,
                           ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: containerId == selectedContainer
-                                ? Colors.green
-                                : Colors.black,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            selectedContainer = containerId;
-                            listen();
-                          });
-                        },
-                        tileColor: Colors.white,
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Colors.grey[400],
-                          size: 20,
-                        ),
-                        visualDensity: VisualDensity.compact,
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                        const SizedBox(height: 16),
+                      ],
+                    ),
                   );
                 },
               ),
